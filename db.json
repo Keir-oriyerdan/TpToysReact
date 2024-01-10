@@ -1,22 +1,27 @@
-{ "toys": 
-
-[ 
-    { "label": "Barbie fait de la bicyclette ", 
-    "price": 9, 
-    "id": 4, 
-    "year": "2012" }, 
-    
-    { "label": "Kapla - boîte de 1000", 
-    "price": 15, 
-    "id": 5, 
-    "year": "2005"}, 
-    
-    { "label": "Légo - boîte de 1000", 
-    "price": 20, 
-    "id": 6, 
-    "year": "2014" } 
-    ], 
-    "panier": 
-    [ { "id": 4 } 
-    ] 
+{
+  "toys": [
+    {
+      "label": "Barbie fait de la bicyclette ",
+      "price": 9,
+      "id": 4,
+      "year": "2012"
+    },
+    {
+      "label": "Kapla - boîte de 1000",
+      "price": 15,
+      "id": 5,
+      "year": "2005"
+    },
+    {
+      "label": "Fusil d'assaut",
+      "price": "40",
+      "year": "2023",
+      "id": 6
+    }
+  ],
+  "panier": [
+    {
+      "id": 4
+    }
+  ]
 }

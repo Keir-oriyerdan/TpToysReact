@@ -22,7 +22,7 @@ export default class ToyFetcher {
       });
   }
   /**
-   * Permet de modifier une tâche
+   * Permet de modifier un jouet
    * @param {number} toyId
    * @param {object} propertieToPatch
    */

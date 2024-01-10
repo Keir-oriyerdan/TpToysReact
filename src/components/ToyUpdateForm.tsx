@@ -58,18 +58,19 @@ const ToyUpdateForm: React.FC<ToyUpdateFormProps> = ({ toyId, onToyUpdate }) => 
           Label:
           <input type="text" name="label" value={updatedToy.label} onChange={handleInputChange} />
         </label>
-        <br />
+        
         <label>
           Prix:
           <input type="number" name="price" value={updatedToy.price} onChange={handleInputChange} />
         </label>
-        <br />
+      
         <label>
           Année:
           <input type="text" name="year" value={updatedToy.year} onChange={handleInputChange} />
         </label>
-        <br />
-        <button type="button" onClick={handleUpdateToy}>
+        
+        <button type="button" onClick={handleUpdateToy} 
+          className="btn btn-success mx-3">
           Modifier
         </button>
       </form>

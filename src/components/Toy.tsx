@@ -6,6 +6,7 @@ interface ToyProps {
   toy: ToyInterface;
   onClickDelete: (toyId: number) => void;
   onClickUpdate: (toyId: number) => void;
+  
 }
 
 const Toy: React.FC<ToyProps> = ({ toy, onClickUpdate, onClickDelete }) => {
@@ -17,15 +18,22 @@ const Toy: React.FC<ToyProps> = ({ toy, onClickUpdate, onClickDelete }) => {
           onClick={() => {
             onClickUpdate(toy.id);
           }}
-          className="btn btn-success">Modifier</button>
+          className="btn btn-success mx-3">Modifier</button>
         <button
           onClick={() => {
             onClickDelete(toy.id);
           }}
-          className="btn btn-danger">Supprimer</button>
+          className="btn btn-danger mx-3">Supprimer</button>
+      </div>
+      <div>
+      
+
       </div>
     </section>
   );
 };
+
+
+
 
 export default Toy;

@@ -12,11 +12,12 @@ import './App.css';
 function App() {
   const [toys, setToys] = useState<ToyInterface[]>([]);
   const [selectedToyId, setSelectedToyId] = useState<number | null>(null);
+  const [sortMode, setSortMode] = useState<'default' | 'year' | 'price'>('default');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     ToyFetcher.loadToys()
       .then((loadedToys: ToyInterface[]) => {
-        // Tri des jouets par ordre alphabétique du label
         const sortedToys = loadedToys.sort((a, b) => a.label.localeCompare(b.label));
         setToys(sortedToys || []);
       })
@@ -26,7 +27,6 @@ function App() {
       });
   }, []);
 
-  //mettre a jour un jouet.
   const handleToyUpdate = (updatedToy: ToyInterface): void => {
     setToys((prevToys) => {
       const updatedToys = prevToys.map((toy) =>
@@ -34,54 +34,66 @@ function App() {
       );
       return updatedToys.sort((a, b) => a.label.localeCompare(b.label));
     });
-    setSelectedToyId(null); // Réinitialiser l'ID du jouet sélectionné après la mise à jour
+    setSelectedToyId(null);
   };
 
-  //Supprimer un jouet
-  function handleClickDelete(toyId: number): void {
+  const handleClickDelete = (toyId: number): void => {
     const updatedToys = toys.filter((toy) => toy.id !== toyId);
     setToys([...updatedToys]);
-  
-    ToyFetcher.deleteToy(toyId)
-      .catch((error) => {
-        console.error("Erreur lors de la suppression du jouet : ", error);
-      });
-  }
+  };
 
-  //ajout d'un nouveau jouet via le ToyForm
   const handleToyAdd = (newToy: ToyInterface): void => {
-    //Mise a jour de l'état de toys
     setToys((prevToys) => {
       const updatedToys = [...prevToys, newToy];
-      /*methode sort utilisée avec une fonction de comparaison pour 
-      trier par ordre alphabétique du label.*/
       return updatedToys.sort((a, b) => a.label.localeCompare(b.label));
     });
   };
 
+  const handleSortChange = (mode: 'default' | 'year' | 'price') => {
+    setSortMode(mode);
+  };
+
+  const handleSortDirectionChange = () => {
+    setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
+  };
+
+  const sortedToys = [...toys].sort((a: ToyInterface, b: ToyInterface) => {
+    if (sortMode === 'default') {
+      return a.label.localeCompare(b.label);
+    } else if (sortMode === 'year') {
+      return sortDirection === 'asc' ? a.year.localeCompare(b.year) : b.year.localeCompare(a.year);
+    } else if (sortMode === 'price') {
+      return sortDirection === 'asc' ? a.price - b.price : b.price - a.price;
+    }
+    return 0;
+  });
 
   return (
     <div className="App container">
-      <h1>Toy List</h1>
+      <h1>Liste des DigiToys</h1>
+      <div>
+      <h3>Trier par:</h3>
+        <button onClick={() => handleSortChange('default')}>Tri par ordre alphabétique</button>
+        <button onClick={() => handleSortChange('year')}>Tri par année</button>
+        <button onClick={() => handleSortChange('price')}>Tri par prix</button>
+        <button onClick={() => handleSortDirectionChange()}>Direction tri : Asc/Desc</button>
+      </div>
       <ToyForm onToyAdd={handleToyAdd} />
-      {[...toys].sort((a: ToyInterface, b: ToyInterface) => (Number(a.done) - Number(b.done)))
-        .map((toy: ToyInterface) => (
-          <div key={toy.label}>
-            {selectedToyId === toy.id ? (
-              <ToyUpdateForm toyId={toy.id} onToyUpdate={handleToyUpdate} />
-            ) : (
-              <Toy
-                toy={toy}
-                onClickDelete={handleClickDelete}
-                onClickUpdate={() => setSelectedToyId(toy.id)}
-              />
-            )}
-          </div>
-        ))}
+      {sortedToys.map((toy: ToyInterface) => (
+        <div key={toy.label}>
+          {selectedToyId === toy.id ? (
+            <ToyUpdateForm toyId={toy.id} onToyUpdate={handleToyUpdate} />
+          ) : (
+            <Toy
+              toy={toy}
+              onClickDelete={handleClickDelete}
+              onClickUpdate={() => setSelectedToyId(toy.id)}
+            />
+          )}
+        </div>
+      ))}
     </div>
   );
 }
 
-
 export default App;
-

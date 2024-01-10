@@ -3,6 +3,7 @@ import ToyFetcher from '../services/ToyFetcher';
 import ToyInterface from '../interfaces/ToyInterface';
 import Toy from './Toy';
 import ToyForm from './ToyForm';
+import ToyUpdateForm from './ToyUpdateForm';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
@@ -10,6 +11,7 @@ import './App.css';
 
 function App() {
   const [toys, setToys] = useState<ToyInterface[]>([]);
+  const [selectedToyId, setSelectedToyId] = useState<number | null>(null);
 
   useEffect(() => {
     ToyFetcher.loadToys()
@@ -24,24 +26,18 @@ function App() {
       });
   }, []);
 
-  function handleClickUpdate(toyId: number): void {
-    console.log(`handleClickUpdate`, toyId);
-    let propertyToPatch: Partial<ToyInterface> | null = null;
-    const toysCopy: ToyInterface[] = toys.map((toy) => {
-      if (toy.id === toyId) {
-      propertyToPatch = {
-        label: toy.label,
-        year: toy.year,
-        price: toy.price
-      }
-    }
-    return toy;
+  //mettre a jour un jouet.
+  const handleToyUpdate = (updatedToy: ToyInterface): void => {
+    setToys((prevToys) => {
+      const updatedToys = prevToys.map((toy) =>
+        toy.id === updatedToy.id ? { ...toy, ...updatedToy } : toy
+      );
+      return updatedToys.sort((a, b) => a.label.localeCompare(b.label));
+    });
+    setSelectedToyId(null); // Réinitialiser l'ID du jouet sélectionné après la mise à jour
+  };
 
-  })
-    setToys((currentState) => toysCopy);
-
-  }
-  
+  //Supprimer un jouet
   function handleClickDelete(toyId: number): void {
     const updatedToys = toys.filter((toy) => toy.id !== toyId);
     setToys([...updatedToys]);
@@ -52,8 +48,15 @@ function App() {
       });
   }
 
+  //ajout d'un nouveau jouet via le ToyForm
   const handleToyAdd = (newToy: ToyInterface): void => {
-    setToys((prevToys) => [...prevToys, newToy]);
+    //Mise a jour de l'état de toys
+    setToys((prevToys) => {
+      const updatedToys = [...prevToys, newToy];
+      /*methode sort utilisée avec une fonction de comparaison pour 
+      trier par ordre alphabétique du label.*/
+      return updatedToys.sort((a, b) => a.label.localeCompare(b.label));
+    });
   };
 
 
@@ -63,7 +66,17 @@ function App() {
       <ToyForm onToyAdd={handleToyAdd} />
       {[...toys].sort((a: ToyInterface, b: ToyInterface) => (Number(a.done) - Number(b.done)))
         .map((toy: ToyInterface) => (
-          <Toy key={toy.label} toy={toy} onClickDelete={handleClickDelete} onClickUpdate={handleClickUpdate} />
+          <div key={toy.label}>
+            {selectedToyId === toy.id ? (
+              <ToyUpdateForm toyId={toy.id} onToyUpdate={handleToyUpdate} />
+            ) : (
+              <Toy
+                toy={toy}
+                onClickDelete={handleClickDelete}
+                onClickUpdate={() => setSelectedToyId(toy.id)}
+              />
+            )}
+          </div>
         ))}
     </div>
   );

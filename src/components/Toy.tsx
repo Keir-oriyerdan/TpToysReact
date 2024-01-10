@@ -17,7 +17,7 @@ const Toy: React.FC<ToyProps> = ({ toy, onClickUpdate, onClickDelete }) => {
           onClick={() => {
             onClickUpdate(toy.id);
           }}
-          className="btn btn-danger">Modifier</button>
+          className="btn btn-success">Modifier</button>
         <button
           onClick={() => {
             onClickDelete(toy.id);

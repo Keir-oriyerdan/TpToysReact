@@ -10,7 +10,7 @@ interface ToyFormProps {
 const ToyForm: React.FC<ToyFormProps> = ({ onToyAdd }) => {
   const [newToy, setNewToy] = useState<Partial<ToyInterface>>({
     label: '',
-    price: 0,
+    price: 0, 
     year: '',
   });
 
@@ -18,7 +18,7 @@ const ToyForm: React.FC<ToyFormProps> = ({ onToyAdd }) => {
     const { name, value } = e.target;
     setNewToy((prevToy) => ({
       ...prevToy,
-      [name]: value,
+      [name]: name === 'price' ? parseFloat(value) : value, 
     }));
   };
 

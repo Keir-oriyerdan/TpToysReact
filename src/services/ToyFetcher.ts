@@ -63,6 +63,7 @@ export default class ToyFetcher {
         );
     });
   }
+
   /**
    * Permet d'ajouter une tâche
    * @param {object} toy

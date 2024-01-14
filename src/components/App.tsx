@@ -6,6 +6,10 @@ import ToyForm from './ToyForm';
 import ToyUpdateForm from './ToyUpdateForm';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
+import { from } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 function App() {
   const [toys, setToys] = useState<ToyInterface[]>([]);
@@ -81,29 +85,17 @@ function App() {
   };
 
   //sauver le panier sur le server Json
-  const saveCartToServer = async (cartData: any, total: number): Promise<void> => {
-    try {
-      console.log('Trying to save cart to server:', cartData, total);
-      const response = await fetch('http://localhost:3000/panier', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ panier: cartData, total }),
-      });
-  
-      if (!response.ok) {
-        console.error('Error saving cart to server:', response.statusText);
+  const saveCartToServer = (cartData: any, total: number): void => {
+    ToyFetcher.saveCartToServer(cartData, total).subscribe(
+      () => {
+        console.log('Cart saved to server successfully.');
+      },
+      (error) => {
+        console.error('Error saving cart to server:', error);
       }
-    } catch (error) {
-      console.error('Error saving cart to server:', error);
-    }
+    );
   };
 
-  // Ajoutez cette ligne après l'appel à saveCartToServer
-
-
-  
 
   //ajout au panier
   const handleAddToCart = (toy: ToyInterface): void => {
@@ -111,10 +103,9 @@ function App() {
     setCart(updatedCart);
     setTotal(calculateTotal(updatedCart));
     saveCartToServer(updatedCart, calculateTotal(updatedCart));
-
-    console.log('Cart saved to server. Waiting for json-server to update db.json...');
   };
   
+  //supp du panier
   const handleRemoveFromCart = (toyId: number): void => {
     const updatedCart = cart.filter((toy) => toy.id !== toyId);
     setCart(updatedCart);
@@ -146,10 +137,10 @@ function App() {
       <h1>Liste des DigiToys</h1>
       <div>
         <h3>Trier par:</h3>
-        <button onClick={() => handleSortChange('default')}>Tri par ordre alphabétique</button>
-        <button onClick={() => handleSortChange('year')}>Tri par année</button>
-        <button onClick={() => handleSortChange('price')}>Tri par prix</button>
-        <button onClick={() => handleSortDirectionChange()}>Direction tri : Asc/Desc</button>
+        <button onClick={() => handleSortChange('default')} className="triList">Tri par ordre alphabétique</button>
+        <button onClick={() => handleSortChange('year')} className="triList">Tri par année</button>
+        <button onClick={() => handleSortChange('price')} className="triList">Tri par prix</button>
+        <button onClick={() => handleSortDirectionChange()} className="triList">Direction tri : Asc/Desc</button>
       </div>
       <ToyForm onToyAdd={handleToyAdd} />
       {sortedToys.map((toy: ToyInterface) => (

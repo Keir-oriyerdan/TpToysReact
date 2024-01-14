@@ -29,10 +29,7 @@ const Toy: React.FC<ToyProps> = ({ toy, onClickUpdate, onClickDelete, onAddToCar
           Ajouter au panier
           </button>
       </div>
-      <div>
       
-
-      </div>
     </section>
   );
 };

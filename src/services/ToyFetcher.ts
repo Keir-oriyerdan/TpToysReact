@@ -1,7 +1,13 @@
 
+import { Observable, from, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import ToyInterface from "../interfaces/ToyInterface";
 export default class ToyFetcher {
   static url: string = "http://localhost:3000/toys";
+  static cartUrl: string = "http://localhost:3000/panier";
+
+
 
   static loadToys(): Promise<ToyInterface[]> {
     return fetch(this.url)
@@ -85,4 +91,31 @@ export default class ToyFetcher {
         );
     });
   }
+
+  static saveCartToServer(cartData: any, total: number): Observable<void> {
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ panier: cartData, total }),
+    };
+
+    return from(
+      fetch(this.cartUrl, requestOptions).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error saving cart to server: ${response.statusText}`);
+        }
+      })
+    ).pipe(
+      catchError((error) => {
+        console.error('Error saving cart to server:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  
 }
+
+

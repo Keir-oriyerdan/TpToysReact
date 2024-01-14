@@ -54,17 +54,17 @@ const ToyUpdateForm: React.FC<ToyUpdateFormProps> = ({ toyId, onToyUpdate }) => 
     <div>
       <h2>Modifier le jouet</h2>
       <form>
-        <label>
+        <label className="addToysLabel">
           Label:
           <input type="text" name="label" value={updatedToy.label} onChange={handleInputChange} />
         </label>
         
-        <label>
+        <label className="addToysLabel">
           Prix:
           <input type="number" name="price" value={updatedToy.price} onChange={handleInputChange} />
         </label>
       
-        <label>
+        <label className="addToysLabel">
           Année:
           <input type="text" name="year" value={updatedToy.year} onChange={handleInputChange} />
         </label>

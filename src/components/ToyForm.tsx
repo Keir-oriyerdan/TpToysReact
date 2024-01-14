@@ -36,23 +36,23 @@ const ToyForm: React.FC<ToyFormProps> = ({ onToyAdd }) => {
   return (
     <div>
       <h2>Ajouter un nouveau jouet</h2>
-      <form>
-        <label>
+      <form className="addToys">
+        <label className="addToysLabel">
           Label:
-          <input type="text" name="label" value={newToy.label} onChange={handleInputChange} />
+          <input type="text" name="label" value={newToy.label} onChange={handleInputChange} className="addHandle"/>
         </label>
         <br />
-        <label>
+        <label className="addToysLabel">
           Prix:
-          <input type="number" name="price" value={newToy.price} onChange={handleInputChange} />
+          <input type="number" name="price" value={newToy.price} onChange={handleInputChange} className="addHandle"/>
         </label>
         <br />
-        <label>
+        <label className="addToysLabel">
           Année:
-          <input type="text" name="year" value={newToy.year} onChange={handleInputChange} />
+          <input type="text" name="year" value={newToy.year} onChange={handleInputChange} className="addHandle"/>
         </label>
         <br />
-        <button type="button" onClick={handleAddToy}>
+        <button type="button" onClick={handleAddToy} className="addRemove">
           Ajouter
         </button>
       </form>

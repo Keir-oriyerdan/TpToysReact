@@ -6,10 +6,7 @@ import ToyForm from './ToyForm';
 import ToyUpdateForm from './ToyUpdateForm';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import { from } from 'rxjs';
-import { ajax } from 'rxjs/ajax';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+
 
 function App() {
   const [toys, setToys] = useState<ToyInterface[]>([]);
@@ -84,14 +81,14 @@ function App() {
     setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
   };
 
-  //sauver le panier sur le server Json
+  //Tentative de sauver le panier sur le server Json
   const saveCartToServer = (cartData: any, total: number): void => {
     ToyFetcher.saveCartToServer(cartData, total).subscribe(
       () => {
-        console.log('Cart saved to server successfully.');
+        console.log('Le panier est sauvegardé dans le fichier Json');
       },
       (error) => {
-        console.error('Error saving cart to server:', error);
+        console.error('Erreur de sauvegarde:', error);
       }
     );
   };
@@ -163,7 +160,7 @@ function App() {
           {cart.map((cartItem) => (
             <li key={cartItem.id}>
               {cartItem.label} - {cartItem.price}€
-              <button onClick={() => handleRemoveFromCart(cartItem.id)}>Retirer du panier</button>
+              <button onClick={() => handleRemoveFromCart(cartItem.id)} className="addRemove">Retirer du panier</button>
             </li>
           ))}
         </ul>

@@ -1,3 +1,15 @@
+1. json-server db.json (Mettre en marche le Server Json)
+2. ouvrir un second terminal
+3. npm start
+4. le terminal demande s'il doit ouvrir un autre port, taper Y pour yes et entrée.
+5. npm install rxjs
+
+6. Tentative de faire persister le panier qui n'a été productive. Je maintients une erreur que je ne parviens pas a comprendre.
+7. Tentative d'ajout de RxJs pour gérer la persistance du panier qui n'a pas fonctionner non plus.
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
